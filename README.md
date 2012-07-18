@@ -4,7 +4,7 @@ BoundedQueue
 A simple, thread-safe Bounded Queue implementation using a
 circular array based on `java.util.ArrayList`.
 
-See the [api docs](http://wetherill.net/apidocs/ "BoundedQueue API docs")
+See the [BoundedQueue API docs](http://wetherill.net/apidocs/ "BoundedQueue API docs")
 
 
 ### Problem Statement
