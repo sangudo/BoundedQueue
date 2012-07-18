@@ -1,31 +1,21 @@
 package com.soundscape.queues;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
  * Unit tests for bounded queue
  */
 public class BoundedQueueTest extends TestCase {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public BoundedQueueTest(String testName) {
-        super(testName);
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite() {
-        return new TestSuite(BoundedQueueTest.class);
-    }
 
     public void testIsEmptyOnCreate() {
         BoundedQueue<String> boundedQueue = new BoundedQueue(1);
+        assertTrue(boundedQueue.count() == 0);
+    }
+
+    public void testAddNull() {
+        BoundedQueue<String> boundedQueue = new BoundedQueue(1);
+        boolean success = boundedQueue.enqueue(null);
+        assertTrue(!success);;
         assertTrue(boundedQueue.count() == 0);
     }
 
@@ -45,7 +35,7 @@ public class BoundedQueueTest extends TestCase {
     public void testFillAndEmpty() {
         int qsize = 10;
         BoundedQueue<String> boundedQueue = new BoundedQueue(qsize);
-        for (int i = 0; i < qsize; i++) {
+        for (int i = 0; i<qsize; i++) {
             boundedQueue.enqueue("element: " + i);
         }
         assertTrue(boundedQueue.count() == qsize);
@@ -71,7 +61,8 @@ public class BoundedQueueTest extends TestCase {
         int qsize = 100;
         BoundedQueue<String> boundedQueue = new BoundedQueue(qsize);
         for (int i = 0; i < qsize; i++) {
-            boundedQueue.enqueue("element: " + i);
+            boolean success = boundedQueue.enqueue("element: " + i);
+            assertTrue(success);
         }
         boolean success = boundedQueue.enqueue("overfill");
         assertTrue(!success);
@@ -111,12 +102,5 @@ public class BoundedQueueTest extends TestCase {
             }
             assertTrue(boundedQueue.count() == 15);
         }
-    }
-
-    public void testAddNull() {
-        BoundedQueue<String> boundedQueue = new BoundedQueue(1);
-        boolean success = boundedQueue.enqueue(null);
-        assertTrue(!success);;
-        assertTrue(boundedQueue.count() == 0);
     }
 }

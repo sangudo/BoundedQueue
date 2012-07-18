@@ -9,10 +9,9 @@ package com.soundscape.queues;
  */
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * A simple, thread-safe bounded queueList implementation
+ * A simple, thread-safe bounded queue implementation
  * <p/>
  * The general contract of {@code BoundedQueue} is:
  * <ul>
@@ -29,7 +28,7 @@ import java.util.List;
 
 public class BoundedQueue<T> implements MinimalQueue<T> {
 
-    // Here we implement the bounded queue as an ArrayList
+    // Implement the bounded queue as an ArrayList
     private ArrayList<T> queueList;
     // size of queue (differs from size of ArrayList)
     private int size;
@@ -37,15 +36,18 @@ public class BoundedQueue<T> implements MinimalQueue<T> {
     private int front;
     // index of back of queue
     private int back;
-    // count of items in queue
-    private int count;
 
     // constructor
     public BoundedQueue(int size) {
-        assert (size > 0);
+        if (size <= 0) {
+            throw new IllegalArgumentException();
+        }
         this.size = size;
         // allocate extra cell in array for "back" (always empty)
-        queueList = new ArrayList<T>(size+1);
+        queueList = new ArrayList<T>(size + 1);
+        for (int i = 0; i < size + 1; i++) {
+            queueList.add(null);
+        }
         front = 0;
         back = 0;
     }
@@ -54,22 +56,36 @@ public class BoundedQueue<T> implements MinimalQueue<T> {
     // remove and return one item from the front of queue
     public T dequeue() {
         T item = null;
-        if (count() > 0) {
-            item = queueList.get(front);
-            front = --front % (size+1);
+
+        // ensure only one consumer at a time can dequeue
+        synchronized (this) {
+            if (count() > 0) {
+                item = queueList.get(front);
+                if (--front < 0) {
+                    front = size;
+                }
+            }
         }
         return item;
     }
 
     @Override
-    // enqueue new item only if it's not null and if there's room for it
+    // add new item to end of queue only if it's not null and if there's room for it
     public boolean enqueue(T obj) {
+        if (obj == null) {
+            return false;
+        }
+
         boolean success = false;
-        if (obj != null) {
+
+        // ensure only one consumer at a time can enqueue
+        synchronized (this) {
             // add element only if there's room for it
             if (count() < size) {
                 queueList.set(back, obj);
-                back = --back % (size + 1);
+                if (--back < 0) {
+                    back = size;
+                }
                 success = true;
             }
         }
