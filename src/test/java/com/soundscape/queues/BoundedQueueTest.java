@@ -75,6 +75,11 @@ public class BoundedQueueTest extends TestCase {
     }
 
 
+    /*
+     * repeatedly partially fill and partially empty queue.
+     * If qsize and counts are chosen carefully, all cells get
+     * a chance to act as both front and back.
+     */
     public void testRepeatedlyFillAndEmpty() {
         int qsize = 37; // prime number
         BoundedQueue<String> boundedQueue = new BoundedQueue(qsize);
@@ -88,7 +93,7 @@ public class BoundedQueueTest extends TestCase {
         }
         assertTrue(boundedQueue.count() == 15);
 
-        for (int i = 1; i < 50; i++) {
+        for (int i = 1; i < 500; i++) {
 
             for (int j = 0; j < 5; j++) {
                 boolean success = boundedQueue.enqueue("element: " + i);

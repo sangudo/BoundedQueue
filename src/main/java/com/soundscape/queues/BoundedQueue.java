@@ -11,25 +11,22 @@ package com.soundscape.queues;
 import java.util.ArrayList;
 
 /**
- * A simple, thread-safe bounded queue implementation
+ * A simple, thread-safe bounded queue implementation using a circular array based on ArrayList.
  * <p/>
  * The general contract of {@code BoundedQueue} is:
  * <ul>
- * <li> A BoundedQueue is initialized with a fixed size</li>
- * <li> After initialization a BoundedQueue guarantees never to allocate additional memory</li>
+ * <li> A {@code BoundedQueue} is initialized with a fixed size</li>
+ * <li> After initialization a {@code BoundedQueue} guarantees never to allocate additional memory</li>
  * <li> Multiple threads can safely manipulate queue</li>
  * <li> Dequeuing from an empty queue returns null</li>
  * <li> Enqueuing to a full queue returns false</li>
  * <li> Enqueuing null is a no-op</li>
- * <li> The content of an unused bucket is undefined</li>
- * <li>
+ * <li> The content of an unused bucket is undefined and never referenced</li>
  * </ul>
  */
 
-public class BoundedQueue<T> implements MinimalQueue<T> {
+public class BoundedQueue<T> extends ArrayList<T> implements MinimalQueue<T> {
 
-    // Implement the bounded queue as an ArrayList
-    private ArrayList<T> queueList;
     // size of queue (differs from size of ArrayList)
     private int size;
     // index of front of queue
@@ -37,30 +34,36 @@ public class BoundedQueue<T> implements MinimalQueue<T> {
     // index of back of queue
     private int back;
 
-    // constructor
+    /**
+     * Create a {@code BoundedQueue} of given size.
+     * @param size
+     */
     public BoundedQueue(int size) {
+        super();
         if (size <= 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("queue size must be positive integer");
         }
         this.size = size;
-        // allocate extra cell in array for "back" (always empty)
-        queueList = new ArrayList<T>(size + 1);
+        // allocate extra cell in array for bucket at back of queue which is always empty
         for (int i = 0; i < size + 1; i++) {
-            queueList.add(null);
+            add(null);
         }
         front = 0;
         back = 0;
     }
 
     @Override
-    // remove and return one item from the front of queue
+    /**
+     * Remove and return one item from the front of queue
+     * @return item
+     */
     public T dequeue() {
         T item = null;
 
         // ensure only one consumer at a time can dequeue
         synchronized (this) {
             if (count() > 0) {
-                item = queueList.get(front);
+                item = get(front);
                 if (--front < 0) {
                     front = size;
                 }
@@ -70,7 +73,13 @@ public class BoundedQueue<T> implements MinimalQueue<T> {
     }
 
     @Override
-    // add new item to end of queue only if it's not null and if there's room for it
+    /**
+     * add new item to end of queue if room is available.
+     * Object cannot be null.
+     * @param object to enqueue
+     * @return boolean false if enqueue fails
+     *
+     */
     public boolean enqueue(T obj) {
         if (obj == null) {
             return false;
@@ -82,7 +91,7 @@ public class BoundedQueue<T> implements MinimalQueue<T> {
         synchronized (this) {
             // add element only if there's room for it
             if (count() < size) {
-                queueList.set(back, obj);
+                set(back, obj);
                 if (--back < 0) {
                     back = size;
                 }
@@ -93,7 +102,10 @@ public class BoundedQueue<T> implements MinimalQueue<T> {
     }
 
     @Override
-    // count items in queue
+    /**
+     *  count items in queue
+     *  @return int count of occupied queue buckets
+     */
     public int count() {
         int count = 0;
 
@@ -107,10 +119,5 @@ public class BoundedQueue<T> implements MinimalQueue<T> {
             assert false; // never happens
         }
         return count;
-    }
-
-    // return queue capacity, guaranteed invariant after initialization
-    public int size() {
-        return size;
     }
 }

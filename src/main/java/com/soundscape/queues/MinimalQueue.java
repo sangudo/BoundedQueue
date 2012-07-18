@@ -4,7 +4,7 @@ package com.soundscape.queues;
  * Created by IntelliJ IDEA.
  * User: jdw
  * Date: 7/17/12
- * Time: 12:06 AM
+ * Time: 10:46 AM
  * Copyright 2012 Glen Canyon Corporation
  */
 
@@ -13,13 +13,23 @@ package com.soundscape.queues;
  */
 public interface MinimalQueue<T> {
 
-    // remove and return first element in queue
+    /**
+     * Remove and return one item from the front of queue
+     * @return item (null if queue is empty)
+     */
     public T dequeue();
 
-//FIXME: figure out proper way to notate this
-    // add new element to end of queue
+    /**
+     * add new item to end of queue if room is available.
+     * Object cannot be null.
+     * @return boolean true if enqueue succeeds
+     *
+     */
     public boolean enqueue(T obj);
 
-    // number of elements in queue
+    /**
+     *  count items in queue
+     *  @return int count of occupied queue buckets
+     */
     public int count();
 }
