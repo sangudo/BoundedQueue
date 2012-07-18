@@ -48,8 +48,8 @@ bounded queue in various states.
 Notes:
 
 <ul>
-<li>The contents of the bucket at the back of the queue are
-undefined. The bucket at the front of the queu contains
+<li>The contents of the cell at the back of the queue are
+undefined. The cell at the front of the queue contains
 the previously enqueued object or null if queue is empty.</li>
 
 <li>With this design, one cell (the "back" cell) is always  empty and
