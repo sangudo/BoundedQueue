@@ -1,8 +1,10 @@
 BoundedQueue
 ============
 
-A simple, thread-safe `Bounded Queue` implementation using a
+A simple, thread-safe Bounded Queue implementation using a
 circular array based on `java.util.ArrayList`.
+
+See the [api docs](http://wetherill.net/apidocs/ "BoundedQueue API docs")
 
 
 ### Problem Statement
@@ -26,10 +28,10 @@ allocate memory after the initialization.*
 ### BoundedQueue Contract
 
   <p>
-  The general contract of `BoundedQueue` is:
+  The general contract of BoundedQueue is:
  <ul>
- <li> A `BoundedQueue` is initialized with a fixed size</li>
- <li> After initialization a `BoundedQueue` guarantees never to allocate additional memory</li>
+ <li> A BoundedQueue is initialized with a fixed size</li>
+ <li> After initialization a BoundedQueue guarantees never to allocate additional memory</li>
  <li> Multiple threads can safely manipulate queue</li>
  <li> Dequeuing from an empty queue returns null</li>
  <li> Enqueuing to a full queue returns false</li>
