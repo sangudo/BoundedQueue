@@ -40,4 +40,20 @@ allocate memory after the initialization.*
 </ul>
 
 
+### Circular Array Implementation
+
+<p>The graphic below shows a circular array implementation of a
+bounded queue in various states.
+
+Notes:
+
+<ul>
+<li>The contents of the bucket at the back of the queue are
+undefined. The bucket at the front of the queu contains
+the previously enqueued object or null if queue is empty.</li>
+
+<li>With this design, one cell (the "back" cell) is always  empty and
+thus the queue capacity is one less than the array size.
+</li>
+
 ![BoundedQueue](http://www.wetherill.net/boundedqueue.png)
