@@ -40,3 +40,4 @@ allocate memory after the initialization.*
 </ul>
 
 
+![BoundedQueue](https://github.com/sangudo/BoundedQueue/blob/master/docs/images/boundedqueue.png)
