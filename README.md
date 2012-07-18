@@ -1,11 +1,11 @@
 BoundedQueue
 ============
 
-This project provides a simple, thread-safe bound queue
-implementation.   
+A simple, thread-safe @{code Bounded Queue} implementation using a
+circular array based on @{code java.util.ArrayList}.
+
 
 ### Problem Statement
-
 
 <b>Bounded Queue</b>
 
@@ -13,16 +13,28 @@ implementation.
 size and can be used by a number of readers and writers. It should not
 allocate memory after the initialization.*
 
-TIME : Please track how much time you spend on this problem, and let
-us know. 
+
+### Distilled Requirements
 
 
-0   Establish Environment
-1   Fully understand requirements
-2   Specify and heavily document initial API
-3   Build tests
-4   Run tests
-5   Fix test failures
-6   Refine and refactor api and implementation
-7   Repeat steps 3 through 6 
+* Support basic queue operations (put/get)
+* Allow multiple readers/writers (thread-safe)
+* Datastructure must be fixed invariant size
+* No memory allocation after initialization
+
+
+### BoundedQueue Contract
+
+  <p>
+  The general contract of @{code BoundedQueue} is:
+ <ul>
+ <li> A @{code BoundedQueue} is initialized with a fixed size</li>
+ <li> After initialization a @{code BoundedQueue} guarantees never to allocate additional memory</li>
+ <li> Multiple threads can safely manipulate queue</li>
+ <li> Dequeuing from an empty queue returns null</li>
+ <li> Enqueuing to a full queue returns false</li>
+ <li> Enqueuing null is a no-op</li>
+ <li> The content of an unused bucket is undefined and never referenced</li>
+</ul>
+
 
